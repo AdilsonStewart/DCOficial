@@ -1,7 +1,10 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Linking, Alert } from 'react-native';
+import { useNavigate } from 'react-router-dom';
+import './Servicos.css';
 
-export default function Servicos({ navigation }) {
+export default function Servicos() {
+  const navigate = useNavigate();
+
   // Função para abrir checkout REAL do Mercado Pago - ÁUDIO
   const abrirPagamentoAudio = async () => {
     try {
@@ -12,7 +15,7 @@ export default function Servicos({ navigation }) {
         },
         body: JSON.stringify({
           valor: 1.99,
-          usuarioId: 'user-audio', // Vamos ajustar depois
+          usuarioId: 'user-audio',
           tipo: "audio"
         })
       });
@@ -20,13 +23,7 @@ export default function Servicos({ navigation }) {
       const data = await response.json();
       
       if (data.success && data.init_point) {
-        Linking.openURL(data.init_point)
-          .then(() => {
-            console.log('Checkout Áudio aberto!');
-          })
-          .catch((err) => {
-            Alert.alert('Erro', 'Não foi possível abrir o pagamento');
-          });
+        window.open(data.init_point, '_blank');
       } else {
         throw new Error('Erro ao criar pagamento áudio');
       }
@@ -34,13 +31,7 @@ export default function Servicos({ navigation }) {
     } catch (error) {
       // FALLBACK: Link direto se a function falhar
       const linkFallback = 'https://mpago.la/1ovRbA6';
-      Linking.openURL(linkFallback)
-        .then(() => {
-          console.log('Fallback áudio aberto!');
-        })
-        .catch((err) => {
-          Alert.alert('Aviso', 'Abra manualmente: ' + linkFallback);
-        });
+      window.open(linkFallback, '_blank');
     }
   };
 
@@ -54,7 +45,7 @@ export default function Servicos({ navigation }) {
         },
         body: JSON.stringify({
           valor: 1.99,
-          usuarioId: 'user-video', // Vamos ajustar depois
+          usuarioId: 'user-video',
           tipo: "video"
         })
       });
@@ -62,13 +53,7 @@ export default function Servicos({ navigation }) {
       const data = await response.json();
       
       if (data.success && data.init_point) {
-        Linking.openURL(data.init_point)
-          .then(() => {
-            console.log('Checkout Vídeo aberto!');
-          })
-          .catch((err) => {
-            Alert.alert('Erro', 'Não foi possível abrir o pagamento');
-          });
+        window.open(data.init_point, '_blank');
       } else {
         throw new Error('Erro ao criar pagamento vídeo');
       }
@@ -76,96 +61,36 @@ export default function Servicos({ navigation }) {
     } catch (error) {
       // FALLBACK: Link direto se a function falhar
       const linkFallback = 'https://mpago.la/1RLYfUB';
-      Linking.openURL(linkFallback)
-        .then(() => {
-          console.log('Fallback vídeo aberto!');
-        })
-        .catch((err) => {
-          Alert.alert('Aviso', 'Abra manualmente: ' + linkFallback);
-        });
+      window.open(linkFallback, '_blank');
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.titulo}>Escolha seu Lembrete</Text>
-      <Text style={styles.slogan}>Como você quer lembrar?</Text>
+    <div className="container">
+      <h1 className="titulo">Escolha seu Lembrete</h1>
+      <p className="slogan">Como você quer lembrar?</p>
 
-      <TouchableOpacity 
-        style={[styles.botao, styles.botaoAudio]} 
-        onPress={abrirPagamentoAudio}
+      <button 
+        className="botao botao-audio"
+        onClick={abrirPagamentoAudio}
       >
-        <Text style={styles.textoBotao}>🎤 Gravar Áudio - R$ 1,99</Text>
-      </TouchableOpacity>
+        🎤 Gravar Áudio - R$ 1,99
+      </button>
 
-      <TouchableOpacity 
-        style={[styles.botao, styles.botaoVideo]} 
-        onPress={abrirPagamentoVideo}
+      <button 
+        className="botao botao-video"
+        onClick={abrirPagamentoVideo}
       >
-        <Text style={styles.textoBotao}>🎥 Gravar Vídeo - R$ 1,99</Text>
-      </TouchableOpacity>
+        🎥 Gravar Vídeo - R$ 1,99
+      </button>
 
-      <TouchableOpacity style={[styles.botao, styles.botaoImagem]}>
-        <Text style={styles.textoBotao}>📸 Anexar Imagem - Em breve</Text>
-      </TouchableOpacity>
+      <button className="botao botao-imagem" disabled>
+        📸 Anexar Imagem - Em breve
+      </button>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-        <Text style={styles.voltarText}>← Voltar para Início</Text>
-      </TouchableOpacity>
-    </View>
+      <button className="voltar-text" onClick={() => navigate('/')}>
+        ← Voltar para Início
+      </button>
+    </div>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    padding: 20,
-  },
-  titulo: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#4A3780',
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-  slogan: {
-    fontSize: 18,
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: 40,
-    lineHeight: 24,
-  },
-  botao: {
-    paddingVertical: 15,
-    paddingHorizontal: 40,
-    borderRadius: 30,
-    marginBottom: 15,
-    width: '80%',
-    alignItems: 'center',
-  },
-  botaoAudio: {
-    backgroundColor: '#00B894',
-  },
-  botaoVideo: {
-    backgroundColor: '#E17055',
-  },
-  botaoImagem: {
-    backgroundColor: '#FD79A8',
-  },
-  textoBotao: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  voltarText: {
-    color: '#6C5CE7',
-    fontSize: 16,
-    fontWeight: '500',
-    textAlign: 'center',
-    marginTop: 10,
-  },
-});
