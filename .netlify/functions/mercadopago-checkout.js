@@ -6,7 +6,7 @@ mercadopago.configure({
  
 exports.handler = async (event) =
   if (event.httpMethod !== 'POST') { 
-    return { statusCode: 405, body: JSON.stringify({ error: 'MÇtodo n∆o permitido' }) }; 
+    return { statusCode: 405, body: JSON.stringify({ error: 'Metodo nao permitido' }) }; 
   } 
  
   try { 
@@ -15,15 +15,15 @@ exports.handler = async (event) =
  
     const response = await mercadopago.preferences.create({ 
       items: [{ 
-        title: "Gravaá∆o - DeixaComigo", 
+        title: "Gravacao - DeixaComigo", 
         unit_price: parseFloat(valor), 
         quantity: 1, 
         currency_id: 'BRL' 
       }], 
       back_urls: { 
-        success: 'https://dcoficial.netlify.app/sucesso', 
-        failure: 'https://dcoficial.netlify.app/erro', 
-        pending: 'https://dcoficial.netlify.app/erro' 
+        success: 'https://deixacomigoweb.netlify.app/sucesso', 
+        failure: 'https://deixacomigoweb.netlify.app/erro', 
+        pending: 'https://deixacomigoweb.netlify.app/erro' 
       }, 
       auto_return: 'approved' 
     }); 
@@ -35,7 +35,7 @@ exports.handler = async (event) =
         success: true, 
         init_point: 'https://dcoficial.netlify.app/sucesso', 
         preference_id: 'simulacao-' + Date.now(), 
-        sandbox_init_point: 'https://dcoficial.netlify.app/sucesso' 
+        sandbox_init_point: 'https://deixacomigoweb.netlify.app/sucesso' 
       }) 
     }; 
  
