@@ -40,6 +40,15 @@ exports.handler = async (event) => {
         pending: 'https://dcoficial.netlify.app/erro'
       },
       auto_return: 'approved',
+      // ⬇️ CONFIGURAÇÕES ADICIONAIS PARA REDIRECIONAMENTO ⬇️
+      payment_methods: {
+        excluded_payment_types: [
+          { id: 'atm' }
+        ],
+        installments: 1
+      },
+      expires: false,
+      // ⬆️ FIM DAS CONFIGURAÇÕES ADICIONAIS ⬆️
       notification_url: 'https://dcoficial.netlify.app/.netlify/functions/webhook-pagamento',
       metadata: {
         usuario_id: usuarioId,
