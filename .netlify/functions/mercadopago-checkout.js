@@ -35,12 +35,12 @@ exports.handler = async (event) => {
         }
       ],
       back_urls: {
-        success: 'https://deixacomigo.netlify.app/pagamento-sucesso',
-        failure: 'https://deixacomigo.netlify.app/pagamento-erro', 
-        pending: 'https://deixacomigo.netlify.app/pagamento-erro'
+        success: 'https://dcoficial.netlify.app/sucesso',
+        failure: 'https://dcoficial.netlify.app/erro', 
+        pending: 'https://dcoficial.netlify.app/erro'
       },
       auto_return: 'approved',
-      notification_url: 'https://deixacomigo.netlify.app/.netlify/functions/webhook-pagamento',
+      notification_url: 'https://dcoficial.netlify.app/.netlify/functions/webhook-pagamento',
       metadata: {
         usuario_id: usuarioId,
         tipo: tipo

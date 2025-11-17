@@ -2,20 +2,89 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Linking, Alert } from 'react-native';
 
 export default function Servicos({ navigation }) {
-  // Função para abrir Mercado Pago
-  const abrirMercadoPago = () => {
-  // Link SIMPLES que sempre funciona - página inicial do Mercado Pago
-  const urlSimples = 'https://www.mercadopago.com.br';
-  
-  Linking.openURL(urlSimples)
-    .then(() => {
-      console.log('Mercado Pago aberto!');
-    })
-    .catch((err) => {
-      Alert.alert('Aviso', 'Abra manualmente: mercadopago.com.br');
-      console.error('Erro:', err);
-    });
-};
+  // Função para abrir checkout REAL do Mercado Pago - ÁUDIO
+  const abrirPagamentoAudio = async () => {
+    try {
+      const response = await fetch('/.netlify/functions/mercadopago-checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          valor: 1.99,
+          usuarioId: 'user-audio', // Vamos ajustar depois
+          tipo: "audio"
+        })
+      });
+
+      const data = await response.json();
+      
+      if (data.success && data.init_point) {
+        Linking.openURL(data.init_point)
+          .then(() => {
+            console.log('Checkout Áudio aberto!');
+          })
+          .catch((err) => {
+            Alert.alert('Erro', 'Não foi possível abrir o pagamento');
+          });
+      } else {
+        throw new Error('Erro ao criar pagamento áudio');
+      }
+      
+    } catch (error) {
+      // FALLBACK: Link direto se a function falhar
+      const linkFallback = 'https://mpago.la/1ovRbA6';
+      Linking.openURL(linkFallback)
+        .then(() => {
+          console.log('Fallback áudio aberto!');
+        })
+        .catch((err) => {
+          Alert.alert('Aviso', 'Abra manualmente: ' + linkFallback);
+        });
+    }
+  };
+
+  // Função para abrir checkout REAL do Mercado Pago - VÍDEO
+  const abrirPagamentoVideo = async () => {
+    try {
+      const response = await fetch('/.netlify/functions/mercadopago-checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          valor: 1.99,
+          usuarioId: 'user-video', // Vamos ajustar depois
+          tipo: "video"
+        })
+      });
+
+      const data = await response.json();
+      
+      if (data.success && data.init_point) {
+        Linking.openURL(data.init_point)
+          .then(() => {
+            console.log('Checkout Vídeo aberto!');
+          })
+          .catch((err) => {
+            Alert.alert('Erro', 'Não foi possível abrir o pagamento');
+          });
+      } else {
+        throw new Error('Erro ao criar pagamento vídeo');
+      }
+      
+    } catch (error) {
+      // FALLBACK: Link direto se a function falhar
+      const linkFallback = 'https://mpago.la/1RLYfUB';
+      Linking.openURL(linkFallback)
+        .then(() => {
+          console.log('Fallback vídeo aberto!');
+        })
+        .catch((err) => {
+          Alert.alert('Aviso', 'Abra manualmente: ' + linkFallback);
+        });
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -24,17 +93,20 @@ export default function Servicos({ navigation }) {
 
       <TouchableOpacity 
         style={[styles.botao, styles.botaoAudio]} 
-        onPress={abrirMercadoPago}
+        onPress={abrirPagamentoAudio}
       >
-        <Text style={styles.textoBotao}>🎤 Gravar Áudio - R$ 9,90</Text>
+        <Text style={styles.textoBotao}>🎤 Gravar Áudio - R$ 1,99</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={[styles.botao, styles.botaoVideo]}>
-        <Text style={styles.textoBotao}>🎥 Gravar Vídeo</Text>
+      <TouchableOpacity 
+        style={[styles.botao, styles.botaoVideo]} 
+        onPress={abrirPagamentoVideo}
+      >
+        <Text style={styles.textoBotao}>🎥 Gravar Vídeo - R$ 1,99</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={[styles.botao, styles.botaoImagem]}>
-        <Text style={styles.textoBotao}>📸 Anexar Imagem</Text>
+        <Text style={styles.textoBotao}>📸 Anexar Imagem - Em breve</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.navigate('Home')}>
