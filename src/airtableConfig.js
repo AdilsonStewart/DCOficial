@@ -1,0 +1,5 @@
+export const AIRTABLE_CONFIG = {
+  API_KEY: 'patFZ9YKiIg1OAoly.b05f7006859706606d1519a3b5ed5ce3ebeff97e4b72f3139163e59cef1ffe4d',
+  BASE_ID: 'mRTSRB5MvGCrVt',
+  TABLE_NAME: 'Table 1'
+};
